@@ -1,0 +1,154 @@
+<nav class="navbar navbar-expand-lg nav bg-dark">
+  <div class="container">
+  </div>
+</nav>
+<body>
+    <h1 class="pricing-section__title">Reserva Salas</h1>
+  <div class="boton">
+<button class="btn btn-dark bot" (click)="formularioAgregar(agregar)">Agregar sala</button>
+</div>
+
+<ng-container *ngIf="salas">
+    <table class="table table-hover table-dark">
+        
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Capacidad</th>
+                <th>Status</th>
+                <th>Opciones</th>
+                <th>Ajustes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let sala of salas">
+            <td>{{this.sala.idSala}}
+            <td>{{this.sala.Nombre}}</td>
+            <td>{{this.sala.Capacidad}}</td>
+            <td>{{this.sala.status}}</td>
+            <td *ngIf="this.sala.status=='Ocupado'"><button style="margin: 15px;" type="button" class="bot" (click)="formulariomosRes(sala.idSala,mostrarReserva)">Ver Detalles</button></td>
+            
+            <td *ngIf="this.sala.status=='Disponible'"><button style="margin: 15px;" type="button" class=" bot" (click)="formularioReservar(sala.idSala,reservar)">Reservar</button></td>
+            <td ><button *ngIf="this.sala.status=='Disponible'" style="margin: 15px;" type="button" class="btn btn-outline-secondary bot" (click)="formularioEditar(sala.idSala,sala.Nombre,sala.Capacidad,sala.status,editar)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+              </svg></button>
+              
+              <button *ngIf="this.sala.status=='Disponible'" style="margin: 15px;" type="button" class="bot" (click)="formularioEliminar(sala.idSala)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg></button></td>
+              
+
+    </tr>
+</tbody>
+
+</table>
+</ng-container>
+
+<ng-container *ngIf="!salas">
+<h1>No hay salas para mostrar</h1>
+</ng-container>
+
+<ng-template #reservar>
+  <form>
+    <div class="form-group">
+      <label for="idSala">ID:</label>
+      <input #idala type="number" class="form-control" id="idSala" aria-describedby="idSala" value={{idMostrar}} readonly="readonly">
+    </div>
+    <div class="form-group">
+      <label for="nombreReserva">Ingresa tu nombre: </label>
+      <input #nombreReserva type="text"  class="form-control" id="nombreReserva">
+      
+    </div>
+    <div class="form-group">
+        <label for="fechaInicio">Hora de inicio: </label>
+        <input #fechaInicio type="datetime"  class="form-control" id="fechaInicio" placeholder="09:15">
+      </div>
+    <div class="form-group">
+        <label for="fechaFinal">Hora Final</label>
+        <input #fechaFinal type="datetime"  class="form-control" id="fechaFinal" placeholder="11:15">
+    </div>
+    <button type="submit" style="margin-top: 10px;" class="bot" (click)="addReserva(idala.value,nombreReserva.value,fechaInicio.value,fechaFinal.value)">Reserva</button>
+  </form>
+</ng-template>
+
+<ng-template #editar>
+<form>
+    <div class="form-group">
+      <label for="idSala">ID:</label>
+      <input #idala type="number" class="form-control" id="idSala" aria-describedby="idSala" value={{idMostrar}} readonly="readonly">
+    </div>
+    <div class="form-group">
+      <label for="nombreSala">Nombre: </label>
+      <input #nombreSala type="text" class="form-control" id="nombreSala" value={{nombreMostrar}} >
+      
+    </div>
+    <div class="form-group">
+        <label for="capacidadSala">Capacidad: </label>
+        <input #capSala type="number" class="form-control" id="capacidadSala" value={{capacidadMostrar}}>
+      </div>
+    <div class="form-group">
+        <label for="statusSala">Status:</label>
+        <input #statusSala type="text" class="form-control" id="statusSala" value={{statusMostrar}} readonly="readonly">
+    </div>
+    <button type="submit" class="bot" style="margin-top: 10px;" (click)="update(idala.value,nombreSala.value,capSala.value,statusSala.value)">Editar</button>
+  </form>
+</ng-template>
+
+<ng-template #agregar>
+    <form>
+        
+        <div class="form-group">
+          <label for="nombreSala">Nombre: </label>
+          <input #nombreSala type="text"  class="form-control" id="nombreSala">
+          <div class="alert alert-danger">
+            <div class="container-error-message">
+              El nombre es obligatorio.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+            <label for="capacidadSala">Capacidad: </label>
+            <input #capSala type="number" class="form-control" id="capacidadSala" >
+            <div class="alert alert-danger">
+              <div class="container-error-message">
+                La capacidad es obligatoria.
+              </div>
+            </div>
+          </div>
+        <button type="submit" class="bot" style="margin-top: 10px;" (click)="addSala(nombreSala.value,capSala.value)">Agregar</button>
+      </form>
+</ng-template>
+
+<ng-template #mostrarReserva>
+  <ng-container *ngIf="reservasAux">
+  <form>
+    <div *ngFor="let res of reservasAux">
+    <div class="form-group">
+      <label for="idSala">ID Reserva:</label>
+      <input #idala type="number" class="form-control" id="idSala" aria-describedby="idSala" value={{this.res.idReserva}} readonly="readonly">
+      
+    </div>
+    <div class="form-group">
+      <label for="nombreReserva">Usuario:</label>
+      <input #nombreReserva type="text" class="form-control" id="nombreReserva" value={{this.res.nombreUsuario}} readonly="readonly">
+      
+    </div>
+    <div class="form-group">
+        <label for="fechaInicio">Fecha de inicio: </label>
+        <input #fechaInicio type="datetime" class="form-control" id="fechaInicio" value={{this.res.fechaInicio}} readonly="readonly">
+      </div>
+    <div class="form-group">
+        <label for="fechaFinal">Fecha Final</label>
+        <input #fechaFinal type="datetime" class="form-control" id="fechaFinal" readonly="readonly" value={{this.res.fechaSalida}}>
+    </div>
+    <button type="submit" class="bot" style="margin-top: 10px;">Aceptar</button>
+    <button type="submit" class="bot" style="margin-top: 10px; margin-left: 10px;" (click)="desbloquearSala(this.res.idReserva,this.res.idSala)">Finalizar</button>
+  </div>
+  </form>
+</ng-container>
+</ng-template>
+
+
+</body>
